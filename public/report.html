@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Report a theft · SafeZone</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+  <nav id="navbar"></nav>
+  <main class="container py-4" style="max-width: 720px">
+    <h1 class="h3 mb-1">Report a theft</h1>
+    <p class="text-secondary">You need the GD you made at the thana. A verifier checks every report before anyone sees it.</p>
+
+    <form id="report-form" class="card card-body" novalidate>
+      <h2 class="h5">1. Your GD copy (optional)</h2>
+      <p class="small text-secondary">
+        Add a photo or PDF of the GD copy and we will read the GD number, date and thana for you.
+        Your GD copy stays on your device: only the details we read are sent, so a verifier can compare them.
+      </p>
+      <div class="mb-3">
+        <label for="gd-copy" class="form-label">Photo or PDF of the GD copy</label>
+        <input id="gd-copy" type="file" class="form-control" accept="image/*,application/pdf">
+      </div>
+      <div id="ocr-progress-box" class="mb-3 d-none">
+        <div class="small mb-1" id="ocr-status">Reading your GD copy… (the first time takes longer)</div>
+        <div class="progress" role="progressbar" aria-label="Reading the GD copy">
+          <div id="ocr-progress" class="progress-bar" style="width: 0%"></div>
+        </div>
+      </div>
+      <div id="ocr-result" class="alert alert-success d-none" role="status"></div>
+
+      <h2 class="h5 mt-2">2. GD details</h2>
+      <div class="row">
+        <div class="col-sm-6 mb-3">
+          <label for="gd-number" class="form-label">GD number</label>
+          <input id="gd-number" class="form-control" inputmode="numeric" placeholder="1245" required>
+        </div>
+        <div class="col-sm-6 mb-3">
+          <label for="gd-date" class="form-label">GD date</label>
+          <input id="gd-date" type="date" class="form-control" required>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="thana" class="form-label">Thana where you made the GD</label>
+        <select id="thana" class="form-select" required></select>
+      </div>
+
+      <h2 class="h5 mt-2">3. What happened</h2>
+      <div class="row">
+        <div class="col-sm-6 mb-3">
+          <label for="theft-type" class="form-label">Type of theft</label>
+          <select id="theft-type" class="form-select" required></select>
+        </div>
+        <div class="col-sm-6 mb-3">
+          <label for="happened-at" class="form-label">When it happened</label>
+          <input id="happened-at" type="datetime-local" class="form-control" required>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="area-search">Where it happened</label>
+        <div class="input-group mb-1">
+          <input id="area-search" class="form-control" list="area-names" autocomplete="off"
+                 placeholder="Search an area, for example Mirpur or ধানমন্ডি">
+          <button id="area-search-button" type="button" class="btn btn-outline-primary">Find</button>
+        </div>
+        <datalist id="area-names"></datalist>
+        <div id="area-search-note" class="form-text mb-2">Find the area, then tap the exact spot on the map.</div>
+        <div id="place-map" class="map-small"></div>
+        <div id="place-note" class="form-text">
+          No place chosen yet. The public map moves the point about 150 m, so your exact place stays private.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Describe what happened</label>
+        <textarea id="description" class="form-control" rows="3" maxlength="1000"
+                  placeholder="For example: two men on a motorbike took my phone near the bus stop."></textarea>
+      </div>
+
+      <div id="error" class="alert alert-danger d-none" role="alert"></div>
+      <button id="send-button" class="btn btn-primary btn-lg w-100">Send report</button>
+    </form>
+
+    <div id="sent" class="alert alert-success d-none mt-3">
+      Thank you. Your report was sent and is waiting for a verifier.
+      <a class="alert-link" href="my-reports.html">See my reports</a>.
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/ocr.js"></script>
+  <script src="js/area-search.js"></script>
+  <script src="js/report.js"></script>
+</body>
+</html>
